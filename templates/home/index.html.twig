@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CoVid Watcher{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="map">Alternative content</div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="/app/js/jquery/dist/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="/app/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="/app/js/raphael/raphael.min.js" type="text/javascript"></script>
+<script src="/app/js/jquery-mapael/js/jquery.mapael.min.js" type="text/javascript"></script>
+<script src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(".container").mapael({
+    map : {
+        name : "france_departments"
+    }
+});
+</script>
+
+{% endblock %}
