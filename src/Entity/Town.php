@@ -74,6 +74,12 @@ class Town
     * @ORM\OneToMany(targetEntity=Record::class, mappedBy="town")
     */
     private $records;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Test::class, mappedBy="town")
+     */
+    private $tests;
+    
     public function __construct()
     {
        $this->tests = new ArrayCollection();
@@ -198,6 +204,10 @@ class Town
         }
 
         return $this;
+    }
+
+    public function __toString() {
+        return $this->getName();
     }
 
 }

@@ -46,7 +46,7 @@ class Region
     private $reaBeds;
 
     /**
-    * @ORM\OneToMany(targetEntity=Department::class, mappedBy="regionId")
+    * @ORM\OneToMany(targetEntity=Department::class, mappedBy="region")
     */
     private $departments;
 

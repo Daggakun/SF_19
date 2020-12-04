@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Record{% endblock %}
+
+{% block body %}
+    <h1>Record</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ record.id }}</td>
+            </tr>
+            <tr>
+                <th>WeekNum</th>
+                <td>{{ record.weekNum }}</td>
+            </tr>
+            <tr>
+                <th>AsympCases</th>
+                <td>{{ record.asympCases }}</td>
+            </tr>
+            <tr>
+                <th>SympCases</th>
+                <td>{{ record.sympCases }}</td>
+            </tr>
+            <tr>
+                <th>ReaCases</th>
+                <td>{{ record.reaCases }}</td>
+            </tr>
+            <tr>
+                <th>DeathCases</th>
+                <td>{{ record.deathCases }}</td>
+            </tr>
+            <tr>
+                <th>Tests</th>
+                <td>{{ record.tests }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('record_index') }}">back to list</a>
+
+    <a href="{{ path('record_edit', {'id': record.id}) }}">edit</a>
+
+    {{ include('record/_delete_form.html.twig') }}
+{% endblock %}

@@ -57,7 +57,7 @@ class Department
 
 
     /**
-    *@ORM\OneToMany(targetEntity=Town::class, mappedBy="departmentId")
+    *@ORM\OneToMany(targetEntity=Town::class, mappedBy="department")
     */
     private $towns;
 
