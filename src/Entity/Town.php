@@ -2,70 +2,69 @@
 
 namespace App\Entity;
 
+use App\Repository\TownRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Town
- *
- * @ORM\Table(name="town", indexes={@ORM\Index(name="department_id", columns={"department_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\TownRepository")
- *
+ * @ORM\Entity(repositoryClass=TownRepository::class)
  */
 class Town
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
+     * @ORM\Column(type="string", length=100)
      */
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="lat", type="string", length=10, nullable=false)
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="towns")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $departmentId;
+
+    /**
+     * @ORM\Column(type="string", length=10)
      */
     private $lat;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="lng", type="string", length=10, nullable=false)
+     * @ORM\Column(type="string", length=10)
      */
     private $lng;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="population", type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $population;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="reabeds", type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $reabeds;
+    private $reaBeds;
 
     /**
-     * @var \Department
-     *
-     * @ORM\ManyToOne(targetEntity="Department")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToMany(targetEntity=Test::class, mappedBy="townId")
      */
-    private $department;
+    private $tests;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Record::class, mappedBy="townId")
+     */
+    private $records;
+
+    public function __construct()
+    {
+        $this->tests = new ArrayCollection();
+        $this->records = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -80,6 +79,18 @@ class Town
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDepartmentId(): ?Department
+    {
+        return $this->departmentId;
+    }
+
+    public function setDepartmentId(?Department $departmentId): self
+    {
+        $this->departmentId = $departmentId;
 
         return $this;
     }
@@ -120,29 +131,75 @@ class Town
         return $this;
     }
 
-    public function getReabeds(): ?int
+    public function getReaBeds(): ?int
     {
-        return $this->reabeds;
+        return $this->reaBeds;
     }
 
-    public function setReabeds(?int $reabeds): self
+    public function setReaBeds(?int $reaBeds): self
     {
-        $this->reabeds = $reabeds;
+        $this->reaBeds = $reaBeds;
 
         return $this;
     }
 
-    public function getDepartment(): ?Department
+    /**
+     * @return Collection|Test[]
+     */
+    public function getTests(): Collection
     {
-        return $this->department;
+        return $this->tests;
     }
 
-    public function setDepartment(?Department $department): self
+    public function addTest(Test $test): self
     {
-        $this->department = $department;
+        if (!$this->tests->contains($test)) {
+            $this->tests[] = $test;
+            $test->setTownId($this);
+        }
 
         return $this;
     }
 
+    public function removeTest(Test $test): self
+    {
+        if ($this->tests->removeElement($test)) {
+            // set the owning side to null (unless already changed)
+            if ($test->getTownId() === $this) {
+                $test->setTownId(null);
+            }
+        }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection|Record[]
+     */
+    public function getRecords(): Collection
+    {
+        return $this->records;
+    }
+
+    public function addRecord(Record $record): self
+    {
+        if (!$this->records->contains($record)) {
+            $this->records[] = $record;
+            $record->setTownId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecord(Record $record): self
+    {
+        if ($this->records->removeElement($record)) {
+            // set the owning side to null (unless already changed)
+            if ($record->getTownId() === $this) {
+                $record->setTownId(null);
+            }
+        }
+
+        return $this;
+    }
 }

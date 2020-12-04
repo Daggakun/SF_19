@@ -2,90 +2,82 @@
 
 namespace App\Entity;
 
+use App\Repository\RecordRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Record
- *
- * @ORM\Table(name="record", indexes={@ORM\Index(name="town_id", columns={"town_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\RecordRepository")
+ * @ORM\Entity(repositoryClass=RecordRepository::class)
  */
 class Record
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="week_num", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="records")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $weekNum;
+    private $townId;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="asymp_cases", type="integer", nullable=false)
+     * @ORM\Column(type="integer")
+     */
+    private $week_num;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $asympCases;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="symp_cases", type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $sympCases;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="rea_cases", type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $reaCases;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="death_cases", type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $deathCases;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="tests", type="integer", nullable=false)
+     * @ORM\Column(type="integer")
      */
     private $tests;
-
-    /**
-     * @var \Town
-     *
-     * @ORM\ManyToOne(targetEntity="Town")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="town_id", referencedColumnName="id")
-     * })
-     */
-    private $town;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getWeekNum(): ?int
+    public function getTownId(): ?Town
     {
-        return $this->weekNum;
+        return $this->townId;
     }
 
-    public function setWeekNum(int $weekNum): self
+    public function setTownId(?Town $townId): self
     {
-        $this->weekNum = $weekNum;
+        $this->townId = $townId;
+
+        return $this;
+    }
+
+    public function getWeekNum(): ?int
+    {
+        return $this->week_num;
+    }
+
+    public function setWeekNum(int $week_num): self
+    {
+        $this->week_num = $week_num;
 
         return $this;
     }
@@ -95,7 +87,7 @@ class Record
         return $this->asympCases;
     }
 
-    public function setAsympCases(int $asympCases): self
+    public function setAsympCases(?int $asympCases): self
     {
         $this->asympCases = $asympCases;
 
@@ -149,18 +141,4 @@ class Record
 
         return $this;
     }
-
-    public function getTown(): ?Town
-    {
-        return $this->town;
-    }
-
-    public function setTown(?Town $town): self
-    {
-        $this->town = $town;
-
-        return $this;
-    }
-
-
 }

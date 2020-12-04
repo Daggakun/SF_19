@@ -2,45 +2,47 @@
 
 namespace App\Entity;
 
+use App\Repository\RegionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Region
- *
- * @ORM\Table(name="region")
- * @ORM\Entity(repositoryClass="App\Repository\RegionRepository")
+ * @ORM\Entity(repositoryClass=RegionRepository::class)
  */
 class Region
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="inh_num", type="bigint", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $inhNum;
+    private $inh_num;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="rea_beds", type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $reaBeds;
+    private $rea_beds;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Department::class, mappedBy="regionId")
+     */
+    private $departments;
+
+    public function __construct()
+    {
+        $this->departments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,29 +61,57 @@ class Region
         return $this;
     }
 
-    public function getInhNum(): ?string
+    public function getInhNum(): ?int
     {
-        return $this->inhNum;
+        return $this->inh_num;
     }
 
-    public function setInhNum(?string $inhNum): self
+    public function setInhNum(?int $inh_num): self
     {
-        $this->inhNum = $inhNum;
+        $this->inh_num = $inh_num;
 
         return $this;
     }
 
     public function getReaBeds(): ?int
     {
-        return $this->reaBeds;
+        return $this->rea_beds;
     }
 
-    public function setReaBeds(?int $reaBeds): self
+    public function setReaBeds(?int $rea_beds): self
     {
-        $this->reaBeds = $reaBeds;
+        $this->rea_beds = $rea_beds;
 
         return $this;
     }
 
+    /**
+     * @return Collection|Department[]
+     */
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
 
+    public function addDepartment(Department $department): self
+    {
+        if (!$this->departments->contains($department)) {
+            $this->departments[] = $department;
+            $department->setRegionId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDepartment(Department $department): self
+    {
+        if ($this->departments->removeElement($department)) {
+            // set the owning side to null (unless already changed)
+            if ($department->getRegionId() === $this) {
+                $department->setRegionId(null);
+            }
+        }
+
+        return $this;
+    }
 }

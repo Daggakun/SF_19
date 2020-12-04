@@ -2,59 +2,69 @@
 
 namespace App\Entity;
 
+use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Department
- *
- * @ORM\Table(name="department", indexes={@ORM\Index(name="region_id", columns={"region_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\DepartmentRepository")
+ * @ORM\Entity(repositoryClass=DepartmentRepository::class)
  */
 class Department
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="id", type="string", length=3, nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=100, nullable=false)
+     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="departments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $regionId;
+
+    /**
+     * @ORM\Column(type="string", length=100)
      */
     private $name;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="inh_num", type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
-    private $inhNum;
+    private $inh_num;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="rea_beds", type="integer", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $reaBeds;
+    private $rea_beds;
 
     /**
-     * @var \Region
-     *
-     * @ORM\ManyToOne(targetEntity="Region")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="region_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToMany(targetEntity=Town::class, mappedBy="departmentId")
      */
-    private $region;
+    private $towns;
 
-    public function getId(): ?string
+    public function __construct()
+    {
+        $this->towns = new ArrayCollection();
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getRegionId(): ?Region
+    {
+        return $this->regionId;
+    }
+
+    public function setRegionId(?Region $regionId): self
+    {
+        $this->regionId = $regionId;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -71,39 +81,55 @@ class Department
 
     public function getInhNum(): ?int
     {
-        return $this->inhNum;
+        return $this->inh_num;
     }
 
-    public function setInhNum(?int $inhNum): self
+    public function setInhNum(int $inh_num): self
     {
-        $this->inhNum = $inhNum;
+        $this->inh_num = $inh_num;
 
         return $this;
     }
 
     public function getReaBeds(): ?int
     {
-        return $this->reaBeds;
+        return $this->rea_beds;
     }
 
-    public function setReaBeds(?int $reaBeds): self
+    public function setReaBeds(?int $rea_beds): self
     {
-        $this->reaBeds = $reaBeds;
+        $this->rea_beds = $rea_beds;
 
         return $this;
     }
 
-    public function getRegion(): ?Region
+    /**
+     * @return Collection|Town[]
+     */
+    public function getTowns(): Collection
     {
-        return $this->region;
+        return $this->towns;
     }
 
-    public function setRegion(?Region $region): self
+    public function addTown(Town $town): self
     {
-        $this->region = $region;
+        if (!$this->towns->contains($town)) {
+            $this->towns[] = $town;
+            $town->setDepartmentId($this);
+        }
 
         return $this;
     }
 
+    public function removeTown(Town $town): self
+    {
+        if ($this->towns->removeElement($town)) {
+            // set the owning side to null (unless already changed)
+            if ($town->getDepartmentId() === $this) {
+                $town->setDepartmentId(null);
+            }
+        }
 
+        return $this;
+    }
 }
