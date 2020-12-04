@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Repository\DepartmentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Department
  *
  * @ORM\Table(name="department", indexes={@ORM\Index(name="region_id", columns={"region_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\DepartmentRepository")
+ * @ORM\Entity(repositoryClass=DepartmentRepository::class)
  */
 class Department
 {
@@ -45,12 +48,22 @@ class Department
     /**
      * @var \Region
      *
-     * @ORM\ManyToOne(targetEntity="Region")
+     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="departments")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      * })
      */
     private $region;
+
+
+    /**
+    *@ORM\OneToMany(targetEntity=Town::class, mappedBy="departmentId")
+    */
+    private $towns;
+
+    public function __construct() {
+        $this->towns = new ArrayCollection();
+    }
 
     public function getId(): ?string
     {
@@ -105,5 +118,45 @@ class Department
         return $this;
     }
 
+    public function getRegionId(): ?Region
+    {
+        return $this->regionId;
+    }
+
+    public function setRegionId(?Region $regionId): self
+    {
+        $this->regionId = $regionId;
+
+        return $this;
+    }
+
+
+    /**
+    * @return Collection|Town[]
+    */
+    public function getTowns(): Collection
+    {
+        return $this->towns;
+    }
+
+    public function addTown(Town $town): self
+    {
+        if (!$this->towns->contains($town)) {
+            $this->towns[] = $town;
+            $town->setDepartmentId($this);
+        }
+        return $this;
+    }
+
+    public function removeTown(Town $town): self
+    {
+        if ($this->towns->removeElement($town)) {
+            // set the owning side to null (unless already changed)
+             if ($town->getDepartmentId() === $this) {
+                $town->setDepartmentId(null);
+            }
+        }
+        return $this;
+    }
 
 }

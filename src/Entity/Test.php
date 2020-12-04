@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\TestRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Test
  *
  * @ORM\Table(name="test", indexes={@ORM\Index(name="town_id", columns={"town_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\TestRepository")
+ * @ORM\Entity(repositoryClass=TestRepository::class)
  */
 class Test
 {
@@ -45,7 +46,7 @@ class Test
     /**
      * @var \Town
      *
-     * @ORM\ManyToOne(targetEntity="Town")
+     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="tests")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="town_id", referencedColumnName="id")
      * })

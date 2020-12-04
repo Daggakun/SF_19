@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Repository\RegionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Region
  *
  * @ORM\Table(name="region")
- * @ORM\Entity(repositoryClass="App\Repository\RegionRepository")
+ * @ORM\Entity(repositoryClass=RegionRepository::class)
  */
 class Region
 {
@@ -41,6 +44,16 @@ class Region
      * @ORM\Column(name="rea_beds", type="integer", nullable=true)
      */
     private $reaBeds;
+
+    /**
+    * @ORM\OneToMany(targetEntity=Department::class, mappedBy="regionId")
+    */
+    private $departments;
+
+    public function __construct()
+    {
+        $this->departments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,5 +96,33 @@ class Region
         return $this;
     }
 
+    /**
+    * @return Collection|Department[]
+    */
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+
+    public function addDepartment(Department $department): self
+    {
+        if (!$this->departments->contains($department)) {
+            $this->departments[] = $department;
+            $department->setRegionId($this);
+        }
+        return $this;
+    }
+
+    public function removeDepartment(Department $department): self
+    {
+        if ($this->departments->removeElement($department)) {
+            // set the owning side to null (unless already changed)
+            if ($department->getRegionId() === $this) {
+                $department->setRegionId(null);
+            }
+        }
+        return $this;
+    }
 
 }

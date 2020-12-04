@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Repository\TownRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Town
  *
  * @ORM\Table(name="town", indexes={@ORM\Index(name="department_id", columns={"department_id"})})
- * @ORM\Entity(repositoryClass="App\Repository\TownRepository")
+ * @ORM\Entity(repositoryClass=TownRepository::class)
  *
  */
 class Town
@@ -60,12 +63,22 @@ class Town
     /**
      * @var \Department
      *
-     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="towns")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
      * })
      */
     private $department;
+
+    /**
+    * @ORM\OneToMany(targetEntity=Record::class, mappedBy="town")
+    */
+    private $records;
+    public function __construct()
+    {
+       $this->tests = new ArrayCollection();
+       $this->records = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -144,5 +157,47 @@ class Town
         return $this;
     }
 
+    public function removeTest(Test $test): self
+    {
+        if ($this->tests->removeElement($test)) {
+            // set the owning side to null (unless already changed)
+            if ($test->getTownId() === $this) {
+                $test->setTownId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Record[]
+     */
+    public function getRecords(): Collection
+    {
+        return $this->records;
+    }
+
+
+    public function addRecord(Record $record): self
+    {
+        if (!$this->records->contains($record)) {
+            $this->records[] = $record;
+            $record->setTownId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecord(Record $record): self
+    {
+        if ($this->records->removeElement($record)) {
+            // set the owning side to null (unless already changed)
+            if ($record->getTownId() === $this) {
+                $record->setTownId(null);
+            }
+        }
+
+        return $this;
+    }
 
 }
