@@ -8,35 +8,46 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Region
+ *
+ * @ORM\Table(name="region")
  * @ORM\Entity(repositoryClass=RegionRepository::class)
  */
 class Region
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @var int|null
+     *
+     * @ORM\Column(name="inh_num", type="bigint", nullable=true)
      */
     private $inhNum;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var int|null
+     *
+     * @ORM\Column(name="rea_beds", type="integer", nullable=true)
      */
     private $reaBeds;
 
     /**
-     * @ORM\OneToMany(targetEntity=Department::class, mappedBy="region")
-     */
+    * @ORM\OneToMany(targetEntity=Department::class, mappedBy="region")
+    */
     private $departments;
 
     public function __construct()
@@ -66,7 +77,7 @@ class Region
         return $this->inhNum;
     }
 
-    public function setInhNum(string $inhNum): self
+    public function setInhNum(?string $inhNum): self
     {
         $this->inhNum = $inhNum;
 
@@ -78,7 +89,7 @@ class Region
         return $this->reaBeds;
     }
 
-    public function setReaBeds(int $reaBeds): self
+    public function setReaBeds(?int $reaBeds): self
     {
         $this->reaBeds = $reaBeds;
 
@@ -86,20 +97,20 @@ class Region
     }
 
     /**
-     * @return Collection|Department[]
-     */
+    * @return Collection|Department[]
+    */
     public function getDepartments(): Collection
     {
         return $this->departments;
     }
 
+
     public function addDepartment(Department $department): self
     {
         if (!$this->departments->contains($department)) {
             $this->departments[] = $department;
-            $department->setRegion($this);
+            $department->setRegionId($this);
         }
-
         return $this;
     }
 
@@ -107,11 +118,11 @@ class Region
     {
         if ($this->departments->removeElement($department)) {
             // set the owning side to null (unless already changed)
-            if ($department->getRegion() === $this) {
-                $department->setRegion(null);
+            if ($department->getRegionId() === $this) {
+                $department->setRegionId(null);
             }
         }
-
         return $this;
     }
+
 }

@@ -8,51 +8,82 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Town
+ *
+ * @ORM\Table(name="town", indexes={@ORM\Index(name="department_id", columns={"department_id"})})
  * @ORM\Entity(repositoryClass=TownRepository::class)
+ *
  */
 class Town
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @var string
+     *
+     * @ORM\Column(name="lat", type="string", length=10, nullable=false)
      */
-    private $inhabitants;
+    private $lat;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var string
+     *
+     * @ORM\Column(name="lng", type="string", length=10, nullable=false)
      */
-    private $reanimationBeds;
+    private $lng;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="population", type="integer", nullable=false)
+     */
+    private $population;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="reabeds", type="integer", nullable=true)
+     */
+    private $reabeds;
+
+    /**
+     * @var \Department
+     *
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="towns")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * })
+     */
+    private $department;
+
+    /**
+    * @ORM\OneToMany(targetEntity=Record::class, mappedBy="town")
+    */
+    private $records;
 
     /**
      * @ORM\OneToMany(targetEntity=Test::class, mappedBy="town")
      */
     private $tests;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Record::class, mappedBy="town", cascade={"persist", "remove"})
-     */
-    private $record;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="towns")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $department;
-
+    
     public function __construct()
     {
-        $this->tests = new ArrayCollection();
+       $this->tests = new ArrayCollection();
+       $this->records = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,73 +103,50 @@ class Town
         return $this;
     }
 
-    public function getInhabitants(): ?string
+    public function getLat(): ?string
     {
-        return $this->inhabitants;
+        return $this->lat;
     }
 
-    public function setInhabitants(string $inhabitants): self
+    public function setLat(string $lat): self
     {
-        $this->inhabitants = $inhabitants;
+        $this->lat = $lat;
 
         return $this;
     }
 
-    public function getReanimationBeds(): ?int
+    public function getLng(): ?string
     {
-        return $this->reanimationBeds;
+        return $this->lng;
     }
 
-    public function setReanimationBeds(int $reanimationBeds): self
+    public function setLng(string $lng): self
     {
-        $this->reanimationBeds = $reanimationBeds;
+        $this->lng = $lng;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Test[]
-     */
-    public function getTests(): Collection
+    public function getPopulation(): ?int
     {
-        return $this->tests;
+        return $this->population;
     }
 
-    public function addTest(Test $test): self
+    public function setPopulation(int $population): self
     {
-        if (!$this->tests->contains($test)) {
-            $this->tests[] = $test;
-            $test->setTown($this);
-        }
+        $this->population = $population;
 
         return $this;
     }
 
-    public function removeTest(Test $test): self
+    public function getReabeds(): ?int
     {
-        if ($this->tests->removeElement($test)) {
-            // set the owning side to null (unless already changed)
-            if ($test->getTown() === $this) {
-                $test->setTown(null);
-            }
-        }
-
-        return $this;
+        return $this->reabeds;
     }
 
-    public function getRecord(): ?Record
+    public function setReabeds(?int $reabeds): self
     {
-        return $this->record;
-    }
-
-    public function setRecord(Record $record): self
-    {
-        $this->record = $record;
-
-        // set the owning side of the relation if necessary
-        if ($record->getTown() !== $this) {
-            $record->setTown($this);
-        }
+        $this->reabeds = $reabeds;
 
         return $this;
     }
@@ -154,4 +162,52 @@ class Town
 
         return $this;
     }
+
+    public function removeTest(Test $test): self
+    {
+        if ($this->tests->removeElement($test)) {
+            // set the owning side to null (unless already changed)
+            if ($test->getTownId() === $this) {
+                $test->setTownId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Record[]
+     */
+    public function getRecords(): Collection
+    {
+        return $this->records;
+    }
+
+
+    public function addRecord(Record $record): self
+    {
+        if (!$this->records->contains($record)) {
+            $this->records[] = $record;
+            $record->setTownId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecord(Record $record): self
+    {
+        if ($this->records->removeElement($record)) {
+            // set the owning side to null (unless already changed)
+            if ($record->getTownId() === $this) {
+                $record->setTownId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString() {
+        return $this->getName();
+    }
+
 }

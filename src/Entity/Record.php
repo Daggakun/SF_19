@@ -6,52 +6,73 @@ use App\Repository\RecordRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Record
+ *
+ * @ORM\Table(name="record", indexes={@ORM\Index(name="town_id", columns={"town_id"})})
  * @ORM\Entity(repositoryClass=RecordRepository::class)
  */
 class Record
 {
     /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="week_num", type="integer", nullable=false)
      */
     private $weekNum;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @var int
+     *
+     * @ORM\Column(name="asymp_cases", type="integer", nullable=false)
      */
     private $asympCases;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @var int
+     *
+     * @ORM\Column(name="symp_cases", type="integer", nullable=false)
      */
     private $sympCases;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @var int
+     *
+     * @ORM\Column(name="rea_cases", type="integer", nullable=false)
      */
     private $reaCases;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @var int
+     *
+     * @ORM\Column(name="death_cases", type="integer", nullable=false)
      */
-    private $deathsCases;
+    private $deathCases;
 
     /**
-     * @ORM\OneToOne(targetEntity=Town::class, inversedBy="record", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $town;
-
-    /**
-     * @ORM\Column(type="integer")
+     * @var int
+     *
+     * @ORM\Column(name="tests", type="integer", nullable=false)
      */
     private $tests;
+
+    /**
+     * @var \Town
+     *
+     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="records")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="town_id", referencedColumnName="id")
+     * })
+     */
+    private $town;
 
     public function getId(): ?int
     {
@@ -70,62 +91,50 @@ class Record
         return $this;
     }
 
-    public function getAsympCases(): ?string
+    public function getAsympCases(): ?int
     {
         return $this->asympCases;
     }
 
-    public function setAsympCases(string $asympCases): self
+    public function setAsympCases(int $asympCases): self
     {
         $this->asympCases = $asympCases;
 
         return $this;
     }
 
-    public function getSympCases(): ?string
+    public function getSympCases(): ?int
     {
         return $this->sympCases;
     }
 
-    public function setSympCases(string $sympCases): self
+    public function setSympCases(int $sympCases): self
     {
         $this->sympCases = $sympCases;
 
         return $this;
     }
 
-    public function getReaCases(): ?string
+    public function getReaCases(): ?int
     {
         return $this->reaCases;
     }
 
-    public function setReaCases(string $reaCases): self
+    public function setReaCases(int $reaCases): self
     {
         $this->reaCases = $reaCases;
 
         return $this;
     }
 
-    public function getDeathsCases(): ?string
+    public function getDeathCases(): ?int
     {
-        return $this->deathsCases;
+        return $this->deathCases;
     }
 
-    public function setDeathsCases(string $deathsCases): self
+    public function setDeathCases(int $deathCases): self
     {
-        $this->deathsCases = $deathsCases;
-
-        return $this;
-    }
-
-    public function getTown(): ?Town
-    {
-        return $this->town;
-    }
-
-    public function setTown(Town $town): self
-    {
-        $this->town = $town;
+        $this->deathCases = $deathCases;
 
         return $this;
     }
@@ -141,4 +150,18 @@ class Record
 
         return $this;
     }
+
+    public function getTown(): ?Town
+    {
+        return $this->town;
+    }
+
+    public function setTown(?Town $town): self
+    {
+        $this->town = $town;
+
+        return $this;
+    }
+
+
 }
