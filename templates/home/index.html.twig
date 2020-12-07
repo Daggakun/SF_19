@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="container">
+<div class="container-fluid col-6 col-offset-3" id="map-container">
     <div class="map">Alternative content</div>
 </div>
 
@@ -14,13 +14,9 @@
 <script type="text/javascript" src="/app/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="/app/js/raphael/raphael.min.js" type="text/javascript"></script>
 <script src="/app/js/jquery-mapael/js/jquery.mapael.min.js" type="text/javascript"></script>
-<script src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8"></script>
+<script src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8" type="text/javascript"></script>
+<script type="text/javascript" src="/app/js/mapFr.js"></script>
 <script type="text/javascript">
-$(".container").mapael({
-    map : {
-        name : "france_departments"
-    }
-});
+    mapFr("");
 </script>
-
 {% endblock %}

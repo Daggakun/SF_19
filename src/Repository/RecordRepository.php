@@ -47,4 +47,13 @@ class RecordRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findRecordsMapSort(Int $week, Int $town) {
+        $qb = $this
+            ->createQueryBuilder('r')
+            -> where('r.town = :town')
+            -> andWhere('r.weekNum = :week')
+            ->setParameters(['town' => $town, 'week' => $week]);
+        $query = $qb->getQuery();
+        return $query->execute();
+    }
 }
