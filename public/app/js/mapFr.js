@@ -23,6 +23,7 @@ function mapFr(data) {
                     "stroke-width": 0.3
                 }
             },
+            //width: ""
             defaultPlot: {
                 text: {
                     attrs: {

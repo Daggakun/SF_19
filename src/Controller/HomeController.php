@@ -17,30 +17,19 @@ class HomeController extends AbstractController
      */
     public function index(RecordRepository $recordRepository): Response
     {
-
-        /*Caching data from db so we can work in peace
-        This means we have to get the data from there like this:
-        $cache->fetch(weekId)*/
-
-        $cache = new PhpFileCache(__DIR__.'/../Cache');
-        // for ($i = 1; $i <= 52; $i++) {
-        //     $store = $recordRepository->findBy([
-        //         'weekNum' => $i
-        //     ]);
-        //     $cache->save("week{$i}", $store);
+        $records = [];
+        for ($i = 1; $i <= 422; $i++) {
+            $records += ['town'.$i => $recordRepository->findRecordsMapSort($i)];
+        }
+        dump($records);
+        dump($records['town1']);
+        // foreach ($records as $record) {
+        //     $record['town'] = setTownById($records[$record]);
         // }
-        $test = $recordRepository->findRecordsMapSort(3, 1);
-        $cache->save('test', $test);
         $response = $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
+            'records' => $records
         ]);
-        $record = $cache->fetch('test');
-        var_dump($record);
-        // $records = [];
-        //
-        // $records = $cache->fetch("week1");
-        //
-        // print_r($records);
         return $response;
     }
 

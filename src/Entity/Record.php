@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RecordRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\TownRepository;
 
 /**
  * Record
@@ -163,5 +164,13 @@ class Record
         return $this;
     }
 
+    public function setTownById($id) {
+        $this->town = TownRepository::find($id);
+        return $this;
+    }
+
+    public function __toString() {
+        return $this->getTown()->getName();
+    }
 
 }

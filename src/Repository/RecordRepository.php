@@ -5,7 +5,8 @@ namespace App\Repository;
 use App\Entity\Record;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use Doctrine\Common\Cache\PhpFileCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 /**
  * @method Record|null find($id, $lockMode = null, $lockVersion = null)
  * @method Record|null findOneBy(array $criteria, array $orderBy = null)
@@ -14,6 +15,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RecordRepository extends ServiceEntityRepository
 {
+    public function findRecordsMapSort($town) {
+
+        $cache = new FilesystemAdapter();
+        $cacheResult = $cache->getItem('town'.$town);
+        if ($cacheResult->isHit()) {
+            return $cacheResult->get();
+        } else {
+            $result = $this->findBy([
+                'town' => $town
+            ]);
+            $cacheResult->set($result);
+            $cache->save($cacheResult);
+            return $result;
+        }
+    }
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Record::class);
@@ -47,13 +65,5 @@ class RecordRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findRecordsMapSort(Int $week, Int $town) {
-        $qb = $this
-            ->createQueryBuilder('r')
-            -> where('r.town = :town')
-            -> andWhere('r.weekNum = :week')
-            ->setParameters(['town' => $town, 'week' => $week]);
-        $query = $qb->getQuery();
-        return $query->execute();
-    }
+
 }
