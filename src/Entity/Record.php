@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RecordRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\TownRepository;
+use App\Repository\TownRepository;
 
 /**
  * Record
@@ -12,7 +12,7 @@ use App\Entity\TownRepository;
  * @ORM\Table(name="record", indexes={@ORM\Index(name="town_id", columns={"town_id"})})
  * @ORM\Entity(repositoryClass=RecordRepository::class)
  */
-class Record
+class Record implements \JsonSerializable
 {
     /**
      * @var int
@@ -68,7 +68,7 @@ class Record
     /**
      * @var \Town
      *
-     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="records")
+     * @ORM\ManyToOne(targetEntity=Town::class, inversedBy="records", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="town_id", referencedColumnName="id")
      * })
@@ -173,4 +173,7 @@ class Record
         return $this->getTown()->getName();
     }
 
+    public function jsonSerialize() {
+        return get_object_vars($this);
+    }
 }

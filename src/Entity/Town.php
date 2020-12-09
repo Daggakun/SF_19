@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=TownRepository::class)
  *
  */
-class Town
+class Town implements \JsonSerializable
 {
     /**
      * @var int
@@ -63,7 +63,7 @@ class Town
     /**
      * @var \Department
      *
-     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="towns")
+     * @ORM\ManyToOne(targetEntity=Department::class, inversedBy="towns", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
      * })
@@ -71,7 +71,7 @@ class Town
     private $department;
 
     /**
-    * @ORM\OneToMany(targetEntity=Record::class, mappedBy="town")
+    * @ORM\OneToMany(targetEntity=Record::class, mappedBy="town", fetch="EAGER")
     */
     private $records;
 
@@ -79,7 +79,7 @@ class Town
      * @ORM\OneToMany(targetEntity=Test::class, mappedBy="town")
      */
     private $tests;
-    
+
     public function __construct()
     {
        $this->tests = new ArrayCollection();
@@ -210,4 +210,7 @@ class Town
         return $this->getName();
     }
 
+    public function jsonSerialize() {
+        return get_object_vars($this);
+    }
 }

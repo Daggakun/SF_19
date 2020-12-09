@@ -48,7 +48,7 @@ class Department
     /**
      * @var \Region
      *
-     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="departments")
+     * @ORM\ManyToOne(targetEntity=Region::class, inversedBy="departments", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      * })

@@ -15,15 +15,19 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
  */
 class RecordRepository extends ServiceEntityRepository
 {
-    public function findRecordsMapSort($town) {
+    /*
+     * This method fetches and returns records in cache if they exist,
+     * execute DB query and caches results if they don't exist 
+     */
+    public function findRecordsMapSort($townId) {
 
         $cache = new FilesystemAdapter();
-        $cacheResult = $cache->getItem('town'.$town);
-        if ($cacheResult->isHit()) {
+        $cacheResult = $cache->getItem('town'.$townId);
+        if ($cacheResult->isHit() && $cacheResult != NULL && !empty($cacheResult)) {
             return $cacheResult->get();
         } else {
             $result = $this->findBy([
-                'town' => $town
+                'town' => $townId
             ]);
             $cacheResult->set($result);
             $cache->save($cacheResult);
