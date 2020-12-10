@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\RecordRepository;
+use App\Repository\TownRepository;
+use App\Repository\DepartmentRepository;
+use App\Repository\RegionRepository;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+
 
 /**
  * @Route("/api")
@@ -20,11 +25,19 @@ class APIController extends AbstractController
      */
     public function jsonMap(Request $req, RecordRepository $recordRepository) {
         if ($req->isXmlHttpRequest()) {
-            $records = [];
-            for ($i = 1; $i <= 422; $i++) {
-                $records += ['town'.$i =>$recordRepository->findRecordsMapSort($i)];
+            $cache = new FilesystemAdapter();
+            $cacheResult = $cache->getItem('jsonMap');
+            if ($cacheResult->isHit() && $cacheResult != NULL && !empty($cacheResult)) {
+                return new JsonResponse($cacheResult->get());
+            } else {
+                $records = [];
+                for ($i = 1; $i <= 422; $i++) {
+                    $records['town'.$i] = $recordRepository->findRecordsMapSort($i);
+                }
+                $cacheResult->set($records);
+                $cache->save($cacheResult);
+                return new JsonResponse($records);
             }
-            return new JsonResponse($records);
         }
         return new JsonResponse('No data found', RESPONSE::HTTP_NOT_FOUND);
     }

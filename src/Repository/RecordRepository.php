@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Record;
+use App\Entity\Department;
+use App\Entity\Region;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Common\Cache\PhpFileCache;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 /**
  * @method Record|null find($id, $lockMode = null, $lockVersion = null)
  * @method Record|null findOneBy(array $criteria, array $orderBy = null)
@@ -17,22 +17,13 @@ class RecordRepository extends ServiceEntityRepository
 {
     /*
      * This method fetches and returns records in cache if they exist,
-     * execute DB query and caches results if they don't exist 
+     * execute DB query and caches results if they don't exist
      */
     public function findRecordsMapSort($townId) {
-
-        $cache = new FilesystemAdapter();
-        $cacheResult = $cache->getItem('town'.$townId);
-        if ($cacheResult->isHit() && $cacheResult != NULL && !empty($cacheResult)) {
-            return $cacheResult->get();
-        } else {
-            $result = $this->findBy([
-                'town' => $townId
-            ]);
-            $cacheResult->set($result);
-            $cache->save($cacheResult);
-            return $result;
-        }
+        $result = $this->findBy([
+            'town' => $townId
+        ]);
+        return $result;
     }
 
 

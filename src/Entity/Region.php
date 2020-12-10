@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="region")
  * @ORM\Entity(repositoryClass=RegionRepository::class)
  */
-class Region
+class Region 
 {
     /**
      * @var int
@@ -123,6 +123,9 @@ class Region
             }
         }
         return $this;
+    }
+    public function jsonSerialize() {
+        return get_object_vars($this);
     }
 
 }

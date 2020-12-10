@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="department", indexes={@ORM\Index(name="region_id", columns={"region_id"})})
  * @ORM\Entity(repositoryClass=DepartmentRepository::class)
  */
-class Department
+class Department implements \JsonSerializable
 {
     /**
      * @var string
@@ -57,7 +57,7 @@ class Department
 
 
     /**
-    *@ORM\OneToMany(targetEntity=Town::class, mappedBy="department")
+    *@ORM\OneToMany(targetEntity=Town::class, mappedBy="department", fetch="EAGER")
     */
     private $towns;
 
@@ -157,5 +157,9 @@ class Department
             }
         }
         return $this;
+    }
+
+    public function jsonSerialize() {
+        return get_object_vars($this);
     }
 }

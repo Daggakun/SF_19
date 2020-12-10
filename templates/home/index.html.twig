@@ -3,21 +3,27 @@
 {% block title %}CoVid Watcher{% endblock %}
 
 {% block body %}
-
-<div class="container-fluid col-6 col-offset-3" id="map-container">
-    <div class="map">Alternative content</div>
-</div>
+    <div class="slidercontainer">
+        <label for="weekNum">Semaine: <span id="weekNumLabel"></span></label>
+        <input type="range" min="1" max="52" value="1" class="slider" id="weekNumSlider">
+    </div>
+    <div class="container-fluid col-6 col-offset-3" id="map-container">
+        <div class="map">Alternative content</div>
+        <div class="areaLegend"><span>Alternate Legend</span></div>
+        <div class="myLegend"><span>Alternate Plots</span></div>
+    </div>
 {% endblock %}
+
 {% block javascripts %}
-    <script type="text/javascript" src="/app/js/jquery/dist/jquery.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/app/js/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="/app/js/raphael/raphael.min.js" type="text/javascript"></script>
-    <script src="/app/js/jquery-mapael/js/jquery.mapael.min.js" type="text/javascript"></script>
-    <script src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8" type="text/javascript"></script>
+    <script type="text/javascript" src="/app/js/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/app/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="/app/js/raphael/raphael.min.js" ></script>
+    <script type="text/javascript" src="/app/js/jquery-mapael/js/jquery.mapael.min.js" ></script>
+    <script type="text/javascript" src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/app/js/mapFr.js"></script>
     <script type="text/javascript">
         $.post('{{ path('jsonmap') }}', function(data){
             mapFr(data);
-        })
+        });
     </script>
 {% endblock %}
