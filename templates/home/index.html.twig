@@ -17,14 +17,12 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/app/js/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="/app/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/app/js/raphael/raphael.min.js" ></script>
     <script type="text/javascript" src="/app/js/jquery-mapael/js/jquery.mapael.min.js" ></script>
     <script type="text/javascript" src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/app/js/mapFr.js"></script>
     <script type="text/javascript">
-        $.post('{{ path('jsonmap') }}', function(data){
+        $.post("{{ path('jsonmap') }}", function(data){
             mapFr(data);
         });
     </script>
