@@ -3,14 +3,16 @@
 {% block title %}CoVid Watcher{% endblock %}
 
 {% block body %}
-    <div class="slidercontainer">
-        <label for="weekNum">Semaine: <span id="weekNumLabel"></span></label>
-        <input type="range" min="1" max="52" value="1" class="slider" id="weekNumSlider">
-    </div>
-    <div class="container-fluid col-6 col-offset-3" id="map-container">
-        <div class="map">Alternative content</div>
-        <div class="areaLegend"><span>Alternate Legend</span></div>
-        <div class="plotLegend"><span>Alternate Plots</span></div>
+    <div class="container-fluid row mt-2" id="map-container">
+        <div class="map col-7">
+            Alternative content
+        </div>
+        <div class="row col-5 justify-content-center">
+            <div class="areaLegend col-6"><span>Alternate Legend</span></div>
+            <div class="plotLegend col-6"><span>Alternate Plots</span></div>
+            <input type="range" min="1" max="52" value="1" class="slider col-11" id="weekNumSlider">
+            <label for="weekNum col-1">Semaine: <span id="weekNumLabel"></span></label>
+        </div>
     </div>
 {% endblock %}
 

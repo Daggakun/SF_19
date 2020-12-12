@@ -135,6 +135,9 @@ function mapFr(rawData) {
         $.each(towns, function(towns, town) {
             //Creating key (department-zip) so mapael can read it
             let key = 'department-'.concat(town.town.department.id)
+            //Creating hrefs
+            let deptHref = "/department/".concat(town.town.department.id)
+            let townHref = "/town/".concat(town.town.id)
 
             //Corsica zipcode exception for mapael
             if (key === 'department-20') {
@@ -148,9 +151,10 @@ function mapFr(rawData) {
             //Searching the key in the week.areas keys ; initializing it if doesn't exist
             if (key in dataStructure[week].areas === false) {
                 dataStructure[week].areas[key] = {
-                    "value": 0,
-                    "tooltip": {
-                        "content": town.town.department.name
+                    value: 0,
+                    href: deptHref,
+                    tooltip: {
+                        content: "<b>" + town.town.department.name + "</b>"
                     }
                 }
             }
@@ -160,9 +164,10 @@ function mapFr(rawData) {
 
             //Creating plots entry for this week
             dataStructure[week]["plots"][town.town.name] = {
-                "value": town.total,
-                "tooltip": {
-                    "content": "<b>" + town.town.name + "</b><br>Cas : " + town.total
+                value: town.total,
+                href: townHref,
+                tooltip: {
+                    content: "<b>" + town.town.name + "</b><br>Cas : " + town.total
                 }
             }
         })
@@ -175,8 +180,8 @@ function mapFr(rawData) {
     //plots.town = {lat, lng, text: {content: name}}
     $.each(rawData, function (town, weeks) {
         plots[weeks[0].town.name] = {
-            "latitude": parseFloat(weeks[0].town.lat),
-            "longitude": parseFloat(weeks[0].town.lng),
+            latitude: parseFloat(weeks[0].town.lat),
+            longitude: parseFloat(weeks[0].town.lng),
             // "text": {
             //     content: weeks[0].town.name
             // }
@@ -192,18 +197,31 @@ function mapFr(rawData) {
     let label = $("#weekNumLabel")
     label.text(slider.val())
 
+    //On slider input, update label value and trigger map update
+    slider.on('input', function() {
+        label.text(slider.val())
+        france.trigger('update', [{
+            mapOptions: dataStructure[slider.val()],
+            animDuration: 300
+        }])
+    })
 
-
-
+    //Map object for mapael
     let map = {
         map: {
             name: "france_departments",
+            tooltip: {},
             defaultArea: {
                 attrs: {
                     fill: "#555555",
                     stroke: "#fff",
                     "stroke-width": 0.3
-                }
+                },
+                attrsHover: {
+                    fill: "#fff",
+                    "font-weight": "bold"
+                },
+                tooltip: {}
             },
             defaultPlot: {
                 attrs: {
@@ -213,17 +231,19 @@ function mapFr(rawData) {
                 attrsHover: {
                     fill: "#fff",
                     "font-weight": "bold"
-                }
+                },
+                tooltip: {}
             },
             //width: ""
             zoom: {
-                enabled: true,
+                enabled: false,
                 step: 0.25,
                 maxLevel: 20
             }
         },
         legend: {
             area: {
+                cssClass: "areaLegend",
                 display: true,
                 title: "Department Cases",
                 marginBottom: 7,
@@ -260,67 +280,64 @@ function mapFr(rawData) {
                 ]
             },
             plot: {
+                cssClass: "plotLegend",
                 display: true,
                 title: "City cases",
                 marginBottom: 6,
-                // slices: [{
-                //         type: "circle",
-                //         max: 50,
-                //         attrs: {
-                //             fill: "#cfcfcf",
-                //             "stroke-width": 0.5
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "Less than 500 000",
-                //         size: 10
-                //     },
-                //     {
-                //         type: "circle",
-                //         min: 50,
-                //         max: 100,
-                //         attrs: {
-                //             fill: "#FD4851",
-                //             "stroke-width": 1
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "Between 500 000 and 1M",
-                //         size: 20
-                //     },
-                //     {
-                //         type: "circle",
-                //         min: 1000000,
-                //         attrs: {
-                //             fill: "#FD4851",
-                //             "stroke-width": 1
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "More than 1M",
-                //         size: 30
-                //     }
-                // ]
+                hideElemsOnClick: {
+                    enabled: true,
+                    opacity: 0
+                },
+                slices: [{
+                    type: "circle",
+                    max: 50,
+                    attrs: {
+                        fill: "#cfcfcf",
+                        "stroke-width": 0.5
+                    },
+                    attrsHover: {
+                        transform: "s1.5",
+                        "stroke-width": 1
+                    },
+                    label: "Less than 10",
+                    size: 10
+                },
+                {
+                    type: "circle",
+                    min: 10,
+                    max: 50,
+                    attrs: {
+                        fill: "#ff6f11",
+                        "stroke-width": 1
+                    },
+                    attrsHover: {
+                        transform: "s1.5",
+                        "stroke-width": 1
+                    },
+                    label: "Between 10 and 50",
+                    size: 20
+                },
+                {
+                    type: "circle",
+                    min: 100,
+                    attrs: {
+                        fill: "#d00808",
+                        "stroke-width": 1
+                    },
+                    attrsHover: {
+                        transform: "s1.5",
+                        "stroke-width": 1
+                    },
+                    label: "More than 100",
+                    size: 30
+                }]
             }
         },
         plots: $.extend(true, {}, dataStructure["1"]["plots"], plots),
         areas: dataStructure["1"]["areas"]
     }
 
-    //On slider input, update label value and trigger map update
-    slider.on('input', function() {
-        label.text(slider.val())
-        france.trigger('update', [{
-            mapOptions: dataStructure[slider.val()],
-            animDuration: 300
-        }])
-    })
+
 
     //Drawing map
     france.mapael(map)
