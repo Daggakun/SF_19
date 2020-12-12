@@ -263,50 +263,50 @@ function mapFr(rawData) {
                 display: true,
                 title: "City cases",
                 marginBottom: 6,
-                // slices: [{
-                //         type: "circle",
-                //         max: 50,
-                //         attrs: {
-                //             fill: "#cfcfcf",
-                //             "stroke-width": 0.5
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "Less than 500 000",
-                //         size: 10
-                //     },
-                //     {
-                //         type: "circle",
-                //         min: 50,
-                //         max: 100,
-                //         attrs: {
-                //             fill: "#FD4851",
-                //             "stroke-width": 1
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "Between 500 000 and 1M",
-                //         size: 20
-                //     },
-                //     {
-                //         type: "circle",
-                //         min: 1000000,
-                //         attrs: {
-                //             fill: "#FD4851",
-                //             "stroke-width": 1
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "More than 1M",
-                //         size: 30
-                //     }
-                // ]
+                slices: [{
+                        type: "circle",
+                        max: 50,
+                        attrs: {
+                            fill: "#cfcfcf",
+                            "stroke-width": 0.5
+                        },
+                        attrsHover: {
+                            transform: "s1.5",
+                            "stroke-width": 1
+                        },
+                        label: "Less than 500 000",
+                        size: 10
+                    },
+                    {
+                        type: "circle",
+                        min: 50,
+                        max: 100,
+                        attrs: {
+                            fill: "#FD4851",
+                            "stroke-width": 1
+                        },
+                        attrsHover: {
+                            transform: "s1.5",
+                            "stroke-width": 1
+                        },
+                        label: "Between 500 000 and 1M",
+                        size: 20
+                    },
+                    {
+                        type: "circle",
+                        min: 1000000,
+                        attrs: {
+                            fill: "#FD4851",
+                            "stroke-width": 1
+                        },
+                        attrsHover: {
+                            transform: "s1.5",
+                            "stroke-width": 1
+                        },
+                        label: "More than 1M",
+                        size: 30
+                    }
+                ]
             }
         },
         plots: $.extend(true, {}, dataStructure["1"]["plots"], plots),
