@@ -1,7 +1,5 @@
 function mapFr(rawData) {
 
-    console.log(rawData)
-
     //Intermediate data storage structure
     let dataArray = {
         "1": [],
@@ -67,7 +65,6 @@ function mapFr(rawData) {
             data[week.weekNum].push(week)
         })
     })
-    console.log(data)
 
     //Final variable to feed to map
     //dataStructure.week.areas: {department: {value, tooltip}}
@@ -172,7 +169,7 @@ function mapFr(rawData) {
             }
         })
     })
-    console.log(dataStructure);
+
     //default plots variable
     let plots = {}
 
@@ -187,7 +184,6 @@ function mapFr(rawData) {
             // }
         }
     })
-    console.log(plots)
 
     // Mapael initialisation
     let france = $("#map-container")
@@ -290,7 +286,7 @@ function mapFr(rawData) {
                 },
                 slices: [{
                     type: "circle",
-                    max: 50,
+                    max: 49,
                     attrs: {
                         fill: "#cfcfcf",
                         "stroke-width": 0.5
@@ -299,13 +295,13 @@ function mapFr(rawData) {
                         transform: "s1.5",
                         "stroke-width": 1
                     },
-                    label: "Less than 10",
+                    label: "Less than 50",
                     size: 10
                 },
                 {
                     type: "circle",
-                    min: 10,
-                    max: 50,
+                    min: 50,
+                    max: 120,
                     attrs: {
                         fill: "#ff6f11",
                         "stroke-width": 1
@@ -314,12 +310,12 @@ function mapFr(rawData) {
                         transform: "s1.5",
                         "stroke-width": 1
                     },
-                    label: "Between 10 and 50",
+                    label: "Between 50 and 120",
                     size: 20
                 },
                 {
                     type: "circle",
-                    min: 100,
+                    min: 120,
                     attrs: {
                         fill: "#d00808",
                         "stroke-width": 1
@@ -328,7 +324,7 @@ function mapFr(rawData) {
                         transform: "s1.5",
                         "stroke-width": 1
                     },
-                    label: "More than 100",
+                    label: "More than 120",
                     size: 30
                 }]
             }
@@ -341,6 +337,4 @@ function mapFr(rawData) {
 
     //Drawing map
     france.mapael(map)
-
-    // console.log(map)
 }

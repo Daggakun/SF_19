@@ -61,4 +61,25 @@ class APIController extends AbstractController
         }
         return new JsonResponse('No data found', RESPONSE::HTTP_NOT_FOUND);
     }
+
+    /**
+     * @Route("/townChart/{townId}", name="townChart")
+     * Returns JSON response with necessary data to build town chart
+     */
+    public function jsonTownChart(Request $req, RecordRepository $recordRepository, Int $townId) {
+        if ($req->isXmlHttpRequest()) {
+            $cache = new FilesystemAdapter();
+            $cacheResult = $cache->getItem('town' . $townId);
+            if ($cacheResult->isHit() && $cacheResult != NULL && !empty($cacheResult)) {
+                return new JsonResponse($cacheResult->get());
+            } else {
+                $records = $recordRepository->findRecordsByTownId($townId);
+                $cacheResult->set($records);
+                $cache->save($cacheResult);
+                return new JsonResponse($records);
+            }
+        }
+        return new JsonResponse('No data found', RESPONSE::HTTP_NOT_FOUND);
+
+    }
 }

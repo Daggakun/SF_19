@@ -1,89 +1,132 @@
-function drawMyChart(data) {
-    console.log(data)
+function drawMyChart(rawData) {
 
-    let dataStructure = {
-         "Semaine 1": {},
-         "Semaine 2": {},
-         "Semaine 3": {},
-         "Semaine 4": {},
-         "Semaine 5": {},
-         "Semaine 6": {},
-         "Semaine 7": {},
-         "Semaine 8": {},
-         "Semaine 9": {},
-        "Semaine 10": {},
-        "Semaine 11": {},
-        "Semaine 12": {},
-        "Semaine 13": {},
-        "Semaine 14": {},
-        "Semaine 15": {},
-        "Semaine 16": {},
-        "Semaine 17": {},
-        "Semaine 18": {},
-        "Semaine 19": {},
-        "Semaine 20": {},
-        "Semaine 21": {},
-        "Semaine 22": {},
-        "Semaine 23": {},
-        "Semaine 24": {},
-        "Semaine 25": {},
-        "Semaine 26": {},
-        "Semaine 27": {},
-        "Semaine 28": {},
-        "Semaine 29": {},
-        "Semaine 30": {},
-        "Semaine 31": {},
-        "Semaine 32": {},
-        "Semaine 33": {},
-        "Semaine 34": {},
-        "Semaine 35": {},
-        "Semaine 36": {},
-        "Semaine 37": {},
-        "Semaine 38": {},
-        "Semaine 39": {},
-        "Semaine 40": {},
-        "Semaine 41": {},
-        "Semaine 42": {},
-        "Semaine 43": {},
-        "Semaine 44": {},
-        "Semaine 45": {},
-        "Semaine 46": {},
-        "Semaine 47": {},
-        "Semaine 48": {},
-        "Semaine 49": {},
-        "Semaine 50": {},
-        "Semaine 51": {},
-        "Semaine 52": {},
+    //Creating datastructure to sort data
+    let dataWeeks = {
+         1: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         2: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         3: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         4: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         5: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         6: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         7: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         8: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+         9: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        10: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        11: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        12: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        13: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        14: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        15: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        16: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        17: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        18: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        19: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        20: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        21: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        22: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        23: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        24: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        25: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        26: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        27: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        28: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        29: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        30: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        31: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        32: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        33: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        34: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        35: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        36: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        37: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        38: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        39: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        40: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        41: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        42: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        43: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        44: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        45: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        46: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        47: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        48: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        49: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        50: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        51: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
+        52: { total: 0, symp: 0, asymp: 0, rea: 0, deaths: 0, tests: 0 },
     }
-    
+
+    //Arranging data, calculating totals by week
+    $.each(rawData, function(records, record) {
+        dataWeeks[record.weekNum].total += record.asympCases + record.sympCases + record.reaCases + record.deathCases
+        dataWeeks[record.weekNum].symp += record.sympCases
+        dataWeeks[record.weekNum].asymp += record.asympCases
+        dataWeeks[record.weekNum].deaths += record.deathCases
+        dataWeeks[record.weekNum].rea += record.reaCases
+        dataWeeks[record.weekNum].tests += record.tests
+    })
+
+    //Declaring variables taking data for chart datasets
+    let dataSetTotal = {
+        label: 'Total Cases',
+        data: [],
+        pointRadius: 0,
+        borderColor: '#9c9c9c',
+        fill: false
+    }
+    let dataSetTests = {
+        label: 'Tests',
+        data: [],
+        pointRadius: 0,
+        borderColor: '#1d31d5',
+        fill: false
+    }
+    let dataSetAsymp = {
+        label: 'Asymptomatic Cases',
+        data: [],
+        pointRadius: 0,
+        borderColor: '#3ca210',
+        fill: false
+    }
+    let dataSetSymp = {
+        label: 'Symptomatic Cases',
+        data: [],
+        pointRadius: 0,
+        borderColor: '#dfd62d',
+        fill: false
+    }
+    let dataSetRea = {
+        label: 'Reanimation Cases',
+        data: [],
+        pointRadius: 0,
+        borderColor: '#ff7f00',
+        fill: false
+    }
+    let dataSetDeaths = {
+        label: 'Deaths Cases',
+        data: [],
+        pointRadius: 0,
+        borderColor: '#f91105',
+        fill: false
+    }
+
+    //Feeding data to variables
+    $.each(dataWeeks, function(weeks, record) {
+        dataSetTotal.data.push(record.total)
+        dataSetTests.data.push(record.tests)
+        dataSetAsymp.data.push(record.asymp)
+        dataSetSymp.data.push(record.symp)
+        dataSetRea.data.push(record.rea)
+        dataSetDeaths.data.push(record.deaths)
+    })
+
+    //Drawing chart, feeding datasets previously built
     let ctx = $("#myChart")
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: Object.keys(dataStructure),
-            datasets: [
-            {
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }
-        ]
+            labels: Object.keys(dataWeeks).map(x => "Week ".concat(x)),
+            datasets: [dataSetTotal, dataSetTests, dataSetAsymp, dataSetSymp, dataSetRea, dataSetDeaths]
         },
         options: {
             scales: {
