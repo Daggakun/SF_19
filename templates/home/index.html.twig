@@ -3,22 +3,34 @@
 {% block title %}CoVid Watcher{% endblock %}
 
 {% block body %}
-    <div class="container-fluid row mt-2" id="map-container">
-        <div class="map col-7">
-            Alternative content
+    <div class="container text-center mt-2">
+        <h1>CoVid Watcher</h1>
+        <p class="text-justify">Welcome to CoVid watcher, a datavisualisation and helper app for CoVid-19 statistics. On this page you will find a map synthetizing stats for a week, as well as some important weekly stats. Click on a department or on a town to see detailed stats about this element.</p>
+    </div>
+    <div class="container-fluid row mt-5 align-items-center justify-content-center" id="map-container">
+        <div class="col-4">
+            <div class="row my-5 myMapTooltip">
+                <p class="myTooltip"></p>
+            </div>
+            <div class="row my-5">
+            <label for="weekNumSlider" class="col-3">Semaine: <span id="weekNumLabel"></span></label>
+            <input type="range" min="1" max="52" value="1" class="slider col-9" id="weekNumSlider">
+            </div>
+            <div class="row my-5">
+                <div class="areaLegend col-6"><span>Alternate Legend</span></div>
+                <div class="plotLegend col-6"><span>Alternate Plots</span></div>
+            </div>
         </div>
-        <div class="row col-5 justify-content-center">
-            <div class="areaLegend col-6"><span>Alternate Legend</span></div>
-            <div class="plotLegend col-6"><span>Alternate Plots</span></div>
-            <input type="range" min="1" max="52" value="1" class="slider col-11" id="weekNumSlider">
-            <label for="weekNum col-1">Semaine: <span id="weekNumLabel"></span></label>
+        <div class="col-1"></div>
+        <div class="map col-6">
+        Alternative content
         </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="/app/js/raphael/raphael.min.js" ></script>
-    <script type="text/javascript" src="/app/js/jquery-mapael/js/jquery.mapael.min.js" ></script>
+    <script type="text/javascript" src="/app/js/raphael/raphael.min.js"></script>
+    <script type="text/javascript" src="/app/js/jquery-mapael/js/jquery.mapael.min.js"></script>
     <script type="text/javascript" src="/app/js/jquery-mapael/js/maps/france_departments.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/app/js/mapFr.js"></script>
     <script type="text/javascript">

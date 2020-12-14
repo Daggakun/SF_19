@@ -59,11 +59,9 @@ function mapFr(rawData) {
     //Arranging data {week1->[town1...town422]...week52->[town1...town422]}
     //Also adding total positive cases by summing up all cases in total key for each week
     let data = dataArray
-    $.each(rawData, function(town, weeks) {
-        $.each(weeks, function(weeks, week) {
-            week.total = week.asympCases + week.reaCases + week.sympCases + week.deathCases
-            data[week.weekNum].push(week)
-        })
+    $.each(rawData, function(town, week) {
+        week.total = week.asympCases + week.reaCases + week.sympCases + week.deathCases
+        data[week.weekNum].push(week)
     })
 
     //Final variable to feed to map
@@ -177,9 +175,9 @@ function mapFr(rawData) {
     //Feeding data to default town plots
     //plots.town = {lat, lng, text: {content: name}}
     $.each(rawData, function (town, weeks) {
-        plots[weeks[0].town.name] = {
-            latitude: parseFloat(weeks[0].town.lat),
-            longitude: parseFloat(weeks[0].town.lng),
+        plots[weeks.town.name] = {
+            latitude: parseFloat(weeks.town.lat),
+            longitude: parseFloat(weeks.town.lng),
             // "text": {
             //     content: weeks[0].town.name
             // }
@@ -209,7 +207,9 @@ function mapFr(rawData) {
     let map = {
         map: {
             name: "france_departments",
-            tooltip: {},
+            tooltip: {
+                cssClass: "myTooltip",
+            },
             defaultArea: {
                 attrs: {
                     fill: "#555555",
