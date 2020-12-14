@@ -143,28 +143,26 @@ function mapFr(rawData) {
             if (key in dataStructure[week].areas === false) {
                 dataStructure[week].areas[key] = {
                     value: 0,
-                    href: deptHref,
-                    tooltip: {
-                        content: "<b>" + town.town.department.name + "</b>"
-                    }
+                    href: deptHref
                 }
             }
 
             //Updating dept total by adding up town total to value total
             dataStructure[week]["areas"][key]["value"] += town.total
-
+            dataStructure[week]["areas"][key].tooltip = {
+                content: "<b>" + town.town.department.name + "</b><br>Cases : " + dataStructure[week]["areas"][key]["value"]
+            }
             //Creating plots entry for this week
             dataStructure[week]["plots"][town.town.name] = {
                 value: town.total,
                 href: townHref,
                 tooltip: {
-                    content: "<b>" + town.town.name + "</b><br>Cas : " + town.total
+                    content: "<b>" + town.town.name + "</b><br>Cases : " + town.total
                 }
             }
         })
     })
 
-    console.log(dataStructure)
 
     //default plots variable
     let plots = {}
@@ -176,16 +174,11 @@ function mapFr(rawData) {
             plots[weeks.town.name] = {
                 latitude: parseFloat(weeks.town.lat),
                 longitude: parseFloat(weeks.town.lng),
-                // "text": {
-                //     content: weeks[0].town.name
-                // }
             }
         }
     })
 
-    console.log(plots)
-
-    // Mapael initialisation
+    // Mapael container init
     let france = $("#map-container")
 
     //Slider init
@@ -207,7 +200,7 @@ function mapFr(rawData) {
         map: {
             name: "france_departments",
             tooltip: {
-                cssClass: "myTooltip",
+                cssClass: "mapTooltip",
             },
             defaultArea: {
                 attrs: {
@@ -217,9 +210,11 @@ function mapFr(rawData) {
                 },
                 attrsHover: {
                     fill: "#fff",
-                    "font-weight": "bold"
+                    "font-weight": "bold",
                 },
-                tooltip: {}
+                tooltip: {
+                    cssClass: "mapTooltip",
+                }
             },
             defaultPlot: {
                 attrs: {
@@ -230,7 +225,9 @@ function mapFr(rawData) {
                     fill: "#fff",
                     "font-weight": "bold"
                 },
-                tooltip: {}
+                tooltip: {
+                    cssClass: "mapTooltip",
+                }
             },
             //width: ""
             zoom: {
@@ -339,4 +336,14 @@ function mapFr(rawData) {
 
     //Drawing map
     france.mapael(map)
+
+    //Tooltip event observer
+    //The default tooltip is hidden by {display : none} so we can get its data on DOM CHANGES event and putting it in our div
+    let defTooltip = document.getElementsByClassName("mapTooltip")
+
+    const config = { attributes: true, childList: true, subtree: true };
+
+    let observer = new MutationObserver(() => $("#myTooltipContainer").html(defTooltip[0].innerHTML))
+    observer.observe(defTooltip[0], config)
+
 }
