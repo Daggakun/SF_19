@@ -1,7 +1,8 @@
 function mapFr(rawData) {
 
-    //Intermediate data storage structure
-    let dataArray = {
+    //Arranging data {week1->[town1...town422]...week52->[town1...town422]}
+    //Also adding total positive cases by summing up all cases in total key for each week
+    let data = {
         "1": [],
         "2": [],
         "3": [],
@@ -55,10 +56,6 @@ function mapFr(rawData) {
        "51": [],
        "52": []
     }
-
-    //Arranging data {week1->[town1...town422]...week52->[town1...town422]}
-    //Also adding total positive cases by summing up all cases in total key for each week
-    let data = dataArray
     $.each(rawData, function(town, week) {
         week.total = week.asympCases + week.reaCases + week.sympCases + week.deathCases
         data[week.weekNum].push(week)
@@ -175,12 +172,14 @@ function mapFr(rawData) {
     //Feeding data to default town plots
     //plots.town = {lat, lng, text: {content: name}}
     $.each(rawData, function (town, weeks) {
-        plots[weeks.town.name] = {
-            latitude: parseFloat(weeks.town.lat),
-            longitude: parseFloat(weeks.town.lng),
-            // "text": {
-            //     content: weeks[0].town.name
-            // }
+        if (weeks.town.name in plots === false) {
+            plots[weeks.town.name] = {
+                latitude: parseFloat(weeks.town.lat),
+                longitude: parseFloat(weeks.town.lng),
+                // "text": {
+                //     content: weeks[0].town.name
+                // }
+            }
         }
     })
 
