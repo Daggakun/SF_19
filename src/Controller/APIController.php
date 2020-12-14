@@ -30,10 +30,7 @@ class APIController extends AbstractController
             if ($cacheResult->isHit() && $cacheResult != NULL && !empty($cacheResult)) {
                 return new JsonResponse($cacheResult->get());
             } else {
-                $records = [];
-                for ($i = 1; $i <= 422; $i++) {
-                    $records['town'.$i] = $recordRepository->findRecordsByTownId($i);
-                }
+                $records = $recordRepository->findAll();
                 $cacheResult->set($records);
                 $cache->save($cacheResult);
                 return new JsonResponse($records);

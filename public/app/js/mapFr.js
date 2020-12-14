@@ -124,7 +124,6 @@ function mapFr(rawData) {
        "52": {areas: {}, plots: {}}
     }
 
-
     //Feeding data to dataStruture
     //dataStructure.week.areas: {value, tooltip}
     //dataStructure.week.plots: {town: value, tooltip}
@@ -170,6 +169,8 @@ function mapFr(rawData) {
         })
     })
 
+    console.log(dataStructure)
+
     //default plots variable
     let plots = {}
 
@@ -184,6 +185,8 @@ function mapFr(rawData) {
             // }
         }
     })
+
+    console.log(plots)
 
     // Mapael initialisation
     let france = $("#map-container")

@@ -183,7 +183,6 @@ class Town implements \JsonSerializable
         return $this->records;
     }
 
-
     public function addRecord(Record $record): self
     {
         if (!$this->records->contains($record)) {
