@@ -2,17 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="/app/css/bootstrap-reboot.min.css" type="text/css">
-        <link rel="stylesheet" href="/app/css/bootstrap.min.css" type="text/css">
-        <link rel="stylesheet" href="/app/css/master.css">
+        <link rel="stylesheet" type="text/css" href="/app/css/bootstrap/bootstrap-reboot.min.css">
+        <link rel="stylesheet" type="text/css" href="/app/css/bootstrap/bootstrap.min.css" >
+        <link rel="stylesheet" type="text/css" href="/app/css/master.css">
         <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
-    <body>
+    <body class="bg-dark text-light">
         {% block body %}{% endblock %}
-        {% block javascripts %}
-            <script type="text/javascript" src="/app/js/jquery/src/dist/jquery.min.js" type="text/javascript"></script>
+        {% block JSGeneral %}
+            <script type="text/javascript" src="/app/js/jquery/dist/jquery.min.js" type="text/javascript"></script>
             <script type="text/javascript" src="/app/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+            {% block javascripts %}{% endblock %}
         {% endblock %}
     </body>
 </html>

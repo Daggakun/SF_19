@@ -1,9 +1,8 @@
 function mapFr(rawData) {
 
-    console.log(rawData)
-
-    //Intermediate data storage structure
-    let dataArray = {
+    //Arranging data {week1->[town1...town422]...week52->[town1...town422]}
+    //Also adding total positive cases by summing up all cases in total key for each week
+    let data = {
         "1": [],
         "2": [],
         "3": [],
@@ -57,17 +56,10 @@ function mapFr(rawData) {
        "51": [],
        "52": []
     }
-
-    //Arranging data {week1->[town1...town422]...week52->[town1...town422]}
-    //Also adding total positive cases by summing up all cases in total key for each week
-    let data = dataArray
-    $.each(rawData, function(town, weeks) {
-        $.each(weeks, function(weeks, week) {
-            week.total = week.asympCases + week.reaCases + week.sympCases + week.deathCases
-            data[week.weekNum].push(week)
-        })
+    $.each(rawData, function(town, week) {
+        week.total = week.asympCases + week.reaCases + week.sympCases + week.deathCases
+        data[week.weekNum].push(week)
     })
-    console.log(data)
 
     //Final variable to feed to map
     //dataStructure.week.areas: {department: {value, tooltip}}
@@ -127,7 +119,6 @@ function mapFr(rawData) {
        "52": {areas: {}, plots: {}}
     }
 
-
     //Feeding data to dataStruture
     //dataStructure.week.areas: {value, tooltip}
     //dataStructure.week.plots: {town: value, tooltip}
@@ -135,6 +126,9 @@ function mapFr(rawData) {
         $.each(towns, function(towns, town) {
             //Creating key (department-zip) so mapael can read it
             let key = 'department-'.concat(town.town.department.id)
+            //Creating hrefs
+            let deptHref = "/department/".concat(town.town.department.id)
+            let townHref = "/town/".concat(town.town.id)
 
             //Corsica zipcode exception for mapael
             if (key === 'department-20') {
@@ -148,43 +142,43 @@ function mapFr(rawData) {
             //Searching the key in the week.areas keys ; initializing it if doesn't exist
             if (key in dataStructure[week].areas === false) {
                 dataStructure[week].areas[key] = {
-                    "value": 0,
-                    "tooltip": {
-                        "content": town.town.department.name
-                    }
+                    value: 0,
+                    href: deptHref
                 }
             }
 
             //Updating dept total by adding up town total to value total
             dataStructure[week]["areas"][key]["value"] += town.total
-
+            dataStructure[week]["areas"][key].tooltip = {
+                content: "<b>" + town.town.department.name + "</b><br>Cases : " + dataStructure[week]["areas"][key]["value"]
+            }
             //Creating plots entry for this week
             dataStructure[week]["plots"][town.town.name] = {
-                "value": town.total,
-                "tooltip": {
-                    "content": "<b>" + town.town.name + "</b><br>Cas : " + town.total
+                value: town.total,
+                href: townHref,
+                tooltip: {
+                    content: "<b>" + town.town.name + "</b><br>Cases : " + town.total
                 }
             }
         })
     })
-    console.log(dataStructure);
+
+
     //default plots variable
     let plots = {}
 
     //Feeding data to default town plots
     //plots.town = {lat, lng, text: {content: name}}
     $.each(rawData, function (town, weeks) {
-        plots[weeks[0].town.name] = {
-            "latitude": parseFloat(weeks[0].town.lat),
-            "longitude": parseFloat(weeks[0].town.lng),
-            // "text": {
-            //     content: weeks[0].town.name
-            // }
+        if (weeks.town.name in plots === false) {
+            plots[weeks.town.name] = {
+                latitude: parseFloat(weeks.town.lat),
+                longitude: parseFloat(weeks.town.lng),
+            }
         }
     })
-    console.log(plots)
 
-    // Mapael initialisation
+    // Mapael container init
     let france = $("#map-container")
 
     //Slider init
@@ -192,17 +186,34 @@ function mapFr(rawData) {
     let label = $("#weekNumLabel")
     label.text(slider.val())
 
+    //On slider input, update label value and trigger map update
+    slider.on('input', function() {
+        label.text(slider.val())
+        france.trigger('update', [{
+            mapOptions: dataStructure[slider.val()],
+            animDuration: 300
+        }])
+    })
 
-
-
+    //Map object for mapael
     let map = {
         map: {
             name: "france_departments",
+            tooltip: {
+                cssClass: "mapTooltip",
+            },
             defaultArea: {
                 attrs: {
                     fill: "#555555",
-                    stroke: "#fff",
+                    stroke: "#000000",
                     "stroke-width": 0.3
+                },
+                attrsHover: {
+                    fill: "#fff",
+                    "font-weight": "bold",
+                },
+                tooltip: {
+                    cssClass: "mapTooltip",
                 }
             },
             defaultPlot: {
@@ -213,21 +224,26 @@ function mapFr(rawData) {
                 attrsHover: {
                     fill: "#fff",
                     "font-weight": "bold"
+                },
+                tooltip: {
+                    cssClass: "mapTooltip",
                 }
             },
             //width: ""
             zoom: {
-                enabled: true,
+                enabled: false,
                 step: 0.25,
                 maxLevel: 20
             }
         },
         legend: {
             area: {
+                cssClass: "areaLegend",
                 display: true,
                 title: "Department Cases",
                 marginBottom: 7,
-                slices: [{
+                slices: [
+                    {
                         max: 50,
                         attrs: {
                             fill: "#cdff88"
@@ -257,73 +273,95 @@ function mapFr(rawData) {
                         },
                         label: "More than 500"
                     }
-                ]
+                ],
+                labelAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                },
+                titleAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                }
             },
             plot: {
+                cssClass: "plotLegend",
                 display: true,
                 title: "City cases",
                 marginBottom: 6,
-                // slices: [{
-                //         type: "circle",
-                //         max: 50,
-                //         attrs: {
-                //             fill: "#cfcfcf",
-                //             "stroke-width": 0.5
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "Less than 500 000",
-                //         size: 10
-                //     },
-                //     {
-                //         type: "circle",
-                //         min: 50,
-                //         max: 100,
-                //         attrs: {
-                //             fill: "#FD4851",
-                //             "stroke-width": 1
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "Between 500 000 and 1M",
-                //         size: 20
-                //     },
-                //     {
-                //         type: "circle",
-                //         min: 1000000,
-                //         attrs: {
-                //             fill: "#FD4851",
-                //             "stroke-width": 1
-                //         },
-                //         attrsHover: {
-                //             transform: "s1.5",
-                //             "stroke-width": 1
-                //         },
-                //         label: "More than 1M",
-                //         size: 30
-                //     }
-                // ]
+                hideElemsOnClick: {
+                    enabled: true,
+                    opacity: 0
+                },
+                slices: [
+                    {
+                    type: "circle",
+                    max: 49,
+                    attrs: {
+                        fill: "#cfcfcf",
+                        "stroke-width": 0.5
+                    },
+                    attrsHover: {
+                        transform: "s1.5",
+                        "stroke-width": 1
+                    },
+                    label: "Less than 50",
+                    size: 10
+                },
+                {
+                    type: "circle",
+                    min: 50,
+                    max: 120,
+                    attrs: {
+                        fill: "#ff6f11",
+                        "stroke-width": 1
+                    },
+                    attrsHover: {
+                        transform: "s1.5",
+                        "stroke-width": 1
+                    },
+                    label: "Between 50 and 120",
+                    size: 20
+                },
+                {
+                    type: "circle",
+                    min: 120,
+                    attrs: {
+                        fill: "#d00808",
+                        "stroke-width": 1
+                    },
+                    attrsHover: {
+                        transform: "s1.5",
+                        "stroke-width": 1
+                    },
+                    label: "More than 120",
+                    size: 30
+                }],
+                labelAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                },
+                titleAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                }
             }
         },
         plots: $.extend(true, {}, dataStructure["1"]["plots"], plots),
         areas: dataStructure["1"]["areas"]
     }
 
-    //On slider input, update label value and trigger map update
-    slider.on('input', function() {
-        label.text(slider.val())
-        france.trigger('update', [{
-            mapOptions: dataStructure[slider.val()],
-            animDuration: 300
-        }])
-    })
+
 
     //Drawing map
     france.mapael(map)
 
-    // console.log(map)
+    //Tooltip event observer
+    //The default tooltip is hidden by {display : none} so we can get its data on DOM CHANGES event and putting it in our div
+    let defTooltip = document.getElementsByClassName("mapTooltip")
+
+    const config = { attributes: true, childList: true, subtree: true };
+
+    let observer = new MutationObserver(() => $("#myTooltipContainer").html(defTooltip[0].innerHTML))
+    observer.observe(defTooltip[0], config)
+
 }

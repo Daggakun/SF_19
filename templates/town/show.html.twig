@@ -3,40 +3,78 @@
 {% block title %}Town{% endblock %}
 
 {% block body %}
-    <h1>Town</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ town.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ town.name }}</td>
-            </tr>
-            <tr>
-                <th>Lat</th>
-                <td>{{ town.lat }}</td>
-            </tr>
-            <tr>
-                <th>Lng</th>
-                <td>{{ town.lng }}</td>
-            </tr>
-            <tr>
-                <th>Population</th>
-                <td>{{ town.population }}</td>
-            </tr>
-            <tr>
-                <th>Reabeds</th>
-                <td>{{ town.reabeds }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('town_index') }}">back to list</a>
-
-    <a href="{{ path('town_edit', {'id': town.id}) }}">edit</a>
-
-    {{ include('town/_delete_form.html.twig') }}
+    <div class="container my-5">
+        <div class="row">
+            <h1 class="col-9 offset-1">{{ town.name }}</h1>
+            <button type="button" class="btn btn-outline-secondary col-2"><a href="{{ path('home') }}">Back to map</a></button>
+        </div>
+    </div>
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Tests</h4>
+                        <p class="card-text" id="tests"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Cases</h4>
+                        <p class="card-text" id="cases"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Asymptomatic Cases</h4>
+                        <p class="card-text" id="asymp"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Symptomatic Cases</h4>
+                        <p class="card-text" id="symp"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Reanimation Cases</h4>
+                        <p class="card-text" id="rea"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Deaths</h4>
+                        <p class="card-text" id="deaths"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <canvas id="myChart"></canvas>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript" src="/app/js/chart.js/dist/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="/app/js/myChart.js"></script>
+    <script type="text/javascript">
+        $.post("{{ path('townChart', {'townId': town.id}) }}", function(data) {
+            drawMyChart(data)
+        })
+    </script>
 {% endblock %}

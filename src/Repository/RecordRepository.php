@@ -16,16 +16,28 @@ use Doctrine\Persistence\ManagerRegistry;
 class RecordRepository extends ServiceEntityRepository
 {
     /*
-     * This method fetches and returns records in cache if they exist,
-     * execute DB query and caches results if they don't exist
+     * This method fetches and returns records by town IDs
      */
-    public function findRecordsMapSort($townId) {
+    public function findRecordsByTownId($townId) {
         $result = $this->findBy([
             'town' => $townId
         ]);
         return $result;
     }
 
+    /*
+     * This method fetches and returns records by dept IDs
+     */
+    public function findRecordsByDeptId($deptId) {
+        $result = [];
+        $records = $this->findAll();
+        foreach($records as $record) {
+            if ($record->getTown()->getDepartment()->getId() == $deptId) {
+                array_push($result, $record);
+            }
+        }
+        return $result;
+    }
 
     public function __construct(ManagerRegistry $registry)
     {
