@@ -4,18 +4,18 @@
 
 {% block body %}
     <div class="container text-center mt-4 jumbotron">
-        <h1 class="display-4 text-dark mb-5">CoVid Watcher</h1>
-        <p class="text-justify text-secondary lead">Welcome to CoVid watcher, a datavisualisation and helper app for CoVid-19 statistics. On this page you will find a map synthetizing stats for a week, as well as some important weekly stats. <br><br> Click on a department or on a town to see detailed stats about this element.</p>
+        <h1 class="display-4 text-dark my-3">CoVid Watcher</h1>
+        <p class="text-justify text-secondary lead">Welcome to CoVid watcher, a datavisualisation and helper app for CoVid-19 statistics. On this page you will find a map synthetizing stats for a week, as well as some important weekly stats. <br> Click on a department or on a town to see detailed stats about this element.</p>
     </div>
     <div class="container-fluid row mt-5 align-items-center justify-content-center" id="map-container">
         <div class="col-4">
             <div class="row my-3 card bg-secondary">
-            <p id="myTooltipContainer" class="card-body"></p>
+                <p id="myTooltipContainer" class="card-body"></p>
             </div>
             <div class="row my-3 card bg-secondary">
                 <div class="card-body row">
-                    <label for="weekNumSlider" class="col-3">Week: <span id="weekNumLabel"></span></label>
-                    <input type="range" min="1" max="52" value="1" class="slider col-9" id="weekNumSlider">
+                    <label for="weekNumSlider" class="col-3 my-auto">Week: <span id="weekNumLabel"></span></label>
+                    <input type="range" min="1" max="52" value="1" class="slider col-9 my-auto" id="weekNumSlider">
                 </div>
             </div>
             <div class="row my-3 card bg-secondary">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="col-1"></div>
-        <div class="map col-6 border border-secondary">
+        <div class="map col-6 border border-secondary p-4">
         Alternative content
         </div>
     </div>
