@@ -3,8 +3,69 @@
 {% block title %}Department{% endblock %}
 
 {% block body %}
-    <h1>{{ department.name }}</h1>
-    <div class="container">
+    <div class="container my-5">
+        <div class="row">
+            <h1 class="col-9 offset-1">{{ department.name }}</h1>
+            <button type="button" class="btn btn-outline-secondary col-2"><a href="{{ path('home') }}">Back to map</a></button>
+        </div>
+    </div>
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Tests</h4>
+                        <p class="card-text" id="tests"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Cases</h4>
+                        <p class="card-text" id="cases"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Asymptomatic Cases</h4>
+                        <p class="card-text" id="asymp"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Symptomatic Cases</h4>
+                        <p class="card-text" id="symp"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Reanimation Cases</h4>
+                        <p class="card-text" id="rea"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Deaths</h4>
+                        <p class="card-text" id="deaths"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
         <canvas id="myChart"></canvas>
     </div>
 {% endblock %}

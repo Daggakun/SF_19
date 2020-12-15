@@ -5,3 +5,18 @@ body {
 .mapTooltip {
     display: none !important;
 }
+
+button a {
+    color: var(--white);
+    text-decoration: none;
+}
+button a:visited {
+    color: var(--white);
+}
+button:hover {
+    background-color: var(--white) !important;
+}
+button:hover a {
+    text-decoration: underline !important;
+    color: var(--dark) !important;
+}

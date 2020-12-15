@@ -205,7 +205,7 @@ function mapFr(rawData) {
             defaultArea: {
                 attrs: {
                     fill: "#555555",
-                    stroke: "#fff",
+                    stroke: "#000000",
                     "stroke-width": 0.3
                 },
                 attrsHover: {
@@ -242,7 +242,8 @@ function mapFr(rawData) {
                 display: true,
                 title: "Department Cases",
                 marginBottom: 7,
-                slices: [{
+                slices: [
+                    {
                         max: 50,
                         attrs: {
                             fill: "#cdff88"
@@ -272,7 +273,15 @@ function mapFr(rawData) {
                         },
                         label: "More than 500"
                     }
-                ]
+                ],
+                labelAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                },
+                titleAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                }
             },
             plot: {
                 cssClass: "plotLegend",
@@ -283,7 +292,8 @@ function mapFr(rawData) {
                     enabled: true,
                     opacity: 0
                 },
-                slices: [{
+                slices: [
+                    {
                     type: "circle",
                     max: 49,
                     attrs: {
@@ -325,7 +335,15 @@ function mapFr(rawData) {
                     },
                     label: "More than 120",
                     size: 30
-                }]
+                }],
+                labelAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                },
+                titleAttrs: {
+                    "font-family": 'sans-serif',
+                    fill: '#f8f9fa'
+                }
             }
         },
         plots: $.extend(true, {}, dataStructure["1"]["plots"], plots),

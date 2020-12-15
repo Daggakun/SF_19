@@ -71,14 +71,14 @@ function drawMyChart(rawData) {
         label: 'Total Cases',
         data: [],
         pointRadius: 0,
-        borderColor: '#9c9c9c',
+        borderColor: '#f8f9fa',
         fill: false
     }
     let dataSetTests = {
         label: 'Tests',
         data: [],
         pointRadius: 0,
-        borderColor: '#1d31d5',
+        borderColor: '#56a1fc',
         fill: false
     }
     let dataSetAsymp = {
@@ -120,6 +120,32 @@ function drawMyChart(rawData) {
         dataSetDeaths.data.push(record.deaths)
     })
 
+    //Calculating and sending totals in cards
+    $("#cases").text(
+        dataSetTotal.data.reduce(
+            (a, b) => a + b, 0)
+        )
+    $("#tests").text(
+        dataSetTests.data.reduce(
+            (a, b) => a + b, 0)
+        )
+    $("#asymp").text(
+        dataSetAsymp.data.reduce(
+            (a, b) => a + b, 0)
+        )
+    $("#symp").text(
+        dataSetSymp.data.reduce(
+            (a, b) => a + b, 0)
+        )
+    $("#rea").text(
+        dataSetRea.data.reduce(
+            (a, b) => a + b, 0)
+        )
+    $("#deaths").text(
+        dataSetDeaths.data.reduce(
+            (a, b) => a + b, 0)
+        )
+
     //Drawing chart, feeding datasets previously built
     let ctx = $("#myChart")
     var myChart = new Chart(ctx, {
@@ -132,9 +158,27 @@ function drawMyChart(rawData) {
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        fontColor: '#f8f9fa',
+                    },
+                    gridLines: {
+                        color: '#6c757d'
                     }
-                }]
+                }],
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: '#f8f9fa',
+                    },
+                    gridLines: {
+                        color: '#6c757d'
+                    }
+                }],
+            },
+            legend: {
+                labels: {
+                    fontColor: '#f8f9fa',
+                },
             }
         }
     });
